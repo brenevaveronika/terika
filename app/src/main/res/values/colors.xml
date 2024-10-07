@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="purplePlum">#585CE5</color>
+    <color name="violetLite">#D0D1FF</color>
+    <color name="lilacPetals">#FAFAFF</color>
+    <color name="lilacPetalsDark">#F0F1F9</color>
+    <color name="pinkypie">#FF69B4</color>
+    <color name="deepBlue">#0F2851</color>
+    <color name="violet">#A1A3F6</color>
+    <color name="coldGrey">#415371</color>
+    <color name="waterLight">#C9EBED</color>
+    <color name="water">#99D7DB</color>
+</resources>

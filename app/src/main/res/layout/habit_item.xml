@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/rounded"
+    android:backgroundTint="@color/white"
+    android:layout_marginBottom="20dp">
+
+
+    <ImageView
+        android:id="@+id/habitIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/cup_drink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/violet" />
+
+    <TextView
+        android:id="@+id/habitHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans_bold"
+        android:text="Матча на кокосовом"
+        android:textColor="@color/deepBlue"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/habitIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/habitSubheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:text="Ежедневно"
+        android:textColor="@color/coldGrey"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/habitHeading"
+        app:layout_constraintTop_toBottomOf="@+id/habitHeading" />
+
+    <ImageView
+        android:id="@+id/habitCheckboxCircleLine"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/habit_checkbox_circle_line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/habitCheckboxCircleFill"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/habit_checkbox_circle_fill"
+        app:layout_constraintBottom_toBottomOf="@+id/habitCheckboxCircleLine"
+        app:layout_constraintEnd_toEndOf="@+id/habitCheckboxCircleLine"
+        app:layout_constraintStart_toStartOf="@+id/habitCheckboxCircleLine"
+        app:layout_constraintTop_toTopOf="@+id/habitCheckboxCircleLine" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
