@@ -1,5 +1,4 @@
 package com.example.terika.adapter
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.terika.R
 import com.example.terika.habit_tracker.Habit
 
-class HabitAdapter: RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
+class HabitAdapter(private val onHabitClick: (Habit) -> Unit):
+    RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
     var data: List<Habit> = emptyList()
         set(newValue) {
             field = newValue
@@ -31,6 +31,9 @@ class HabitAdapter: RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
             holder.habitSubheading.text = it.subheading
             holder.habitCheckboxCircleFill.setImageResource(it.checkboxFillId)
             holder.habitCheckboxCircleLine.setImageResource(it.checkboxLineId)
+            holder.habitCheckboxCircleFill.setOnClickListener {
+                onHabitClick(data[position])
+            }
         }
     }
 
@@ -41,4 +44,5 @@ class HabitAdapter: RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
         val habitCheckboxCircleFill: ImageView = itemView.findViewById(R.id.habitCheckboxCircleFill)
         val habitCheckboxCircleLine: ImageView = itemView.findViewById(R.id.habitCheckboxCircleLine)
     }
+
 }
