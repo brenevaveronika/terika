@@ -48,4 +48,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    implementation("com.kizitonwose.calendar:view:2.6.0")
 }

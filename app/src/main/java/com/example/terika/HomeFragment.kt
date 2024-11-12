@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,16 @@ import com.example.terika.adapter.CalendarAdapter
 import com.example.terika.adapter.HabitAdapter
 import com.example.terika.calendar.CalendarDay
 import com.example.terika.habit_tracker.HabitGenerator
+import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.core.atStartOfMonth
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.view.CalendarView
+import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.WeekCalendarView
+import com.kizitonwose.calendar.view.WeekDayBinder
 import java.time.LocalDate
+import java.time.YearMonth
 
 
 private const val ARG_PARAM1 = "param1"
@@ -23,6 +33,7 @@ private const val ARG_PARAM2 = "param2"
 
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
+    private lateinit var calendarView : WeekCalendarView
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var recyclerView: RecyclerView
@@ -50,9 +61,28 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // настройка CalendarRecyclerView
 
-        recyclerView = view.findViewById(R.id.calendarRecyclerView)
-        setupRecyclerView()
+        calendarView = view.findViewById(R.id.weekCalendarView)
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val textView = view.findViewById<TextView>(R.id.calendarDayText)
+        }
 
+        calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
+            // Called only when a new container is needed.
+            override fun create(view: View) = DayViewContainer(view)
+
+            // Called every time we need to reuse a container.
+            override fun bind(container: DayViewContainer, data: WeekDay) {
+                container.textView.text = data.date.dayOfMonth.toString()
+            }
+        }
+
+        val currentDate = LocalDate.now()
+        val currentMonth = YearMonth.now()
+        val startDate = currentMonth.minusMonths(100).atStartOfMonth() // Adjust as needed
+        val endDate = currentMonth.plusMonths(100).atEndOfMonth() // Adjust as needed
+        val firstDayOfWeek = firstDayOfWeekFromLocale() // Available from the library
+        calendarView.setup(startDate, endDate, firstDayOfWeek)
+        calendarView.scrollToWeek(currentDate)
 
         // настройка HabitRecyclerView
         val habitsRecycler: RecyclerView = view.findViewById(R.id.habitRecycler)
@@ -69,20 +99,6 @@ class HomeFragment : Fragment() {
         habitsAdapter.data = HabitGenerator.generateHabit(5)
         super.onViewCreated(view, savedInstanceState)
         // что-то здесь для того чтобы листенер повесить?
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setupRecyclerView() {
-        val today = LocalDate.now()
-
-        // Populate the calendar with current and future dates (for example, next 30 days)
-        for (i in -5 until 50) {
-            val date = today.plusDays(i.toLong())
-            calendarDates.add(CalendarDay(date, date.isEqual(today)))
-        }
-        adapter = CalendarAdapter(calendarDates)
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = adapter
     }
 
 

@@ -31,7 +31,7 @@ class HabitAdapter(private val onHabitClick: (Habit) -> Unit):
             holder.habitSubheading.text = it.subheading
             holder.habitCheckboxCircleFill.setImageResource(it.checkboxFillId)
             holder.habitCheckboxCircleLine.setImageResource(it.checkboxLineId)
-            holder.habitCheckboxCircleFill.setOnClickListener {
+            holder.habitHeading.setOnClickListener {
                 onHabitClick(data[position])
             }
         }
