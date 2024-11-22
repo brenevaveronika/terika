@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "424678860160",
+    "project_id": "terika-caf94",
+    "storage_bucket": "terika-caf94.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424678860160:android:9b10519b8a03051e14cd65",
+        "android_client_info": {
+          "package_name": "com.example.terika"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGptfmTUIgQoVYYyF3_fjHn0MGEjrL-9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

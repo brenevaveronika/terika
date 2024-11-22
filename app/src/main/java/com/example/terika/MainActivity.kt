@@ -16,8 +16,12 @@ import com.example.terika.HabitTrackerFragment
 import com.example.terika.HomeFragment
 import com.example.terika.SettingFragment
 import com.example.terika.adapter.HabitAdapter
-import com.example.terika.habit_tracker.HabitGenerator
+import com.example.terika.aesthetic_cards.AestheticCard
+import com.example.terika.habit_tracker.Habit
+// import com.example.terika.habit_tracker.HabitGenerator
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val fs = Firebase.firestore
 
         loadFragment(HomeFragment())
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView

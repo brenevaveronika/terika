@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.terika.R
 import com.example.terika.habit_tracker.Habit
 
-class HabitAdapter(private val onHabitClick: (Habit) -> Unit):
+class HabitAdapter(private val onHabitClick: (Habit) -> Unit, private val habits: List<Habit>):
     RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
-    var data: List<Habit> = emptyList()
-        set(newValue) {
-            field = newValue
-            notifyDataSetChanged()
-        }
+//    var data: List<Habit> = emptyList()
+//        set(newValue) {
+//            field = newValue
+//            notifyDataSetChanged()
+//        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -22,17 +22,17 @@ class HabitAdapter(private val onHabitClick: (Habit) -> Unit):
         return HabitViewHolder(itemView)
     }
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int = habits.size
 
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
-        data[position].let {
+        habits[position].let {
             holder.habitIcon.setImageResource(it.imageResId)
             holder.habitHeading.text = it.heading
             holder.habitSubheading.text = it.subheading
             holder.habitCheckboxCircleFill.setImageResource(it.checkboxFillId)
             holder.habitCheckboxCircleLine.setImageResource(it.checkboxLineId)
             holder.habitHeading.setOnClickListener {
-                onHabitClick(data[position])
+                onHabitClick(habits[position])
             }
         }
     }

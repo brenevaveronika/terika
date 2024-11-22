@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.gms)
     id("kotlin-android")
     id("kotlin-parcelize")
 }
@@ -38,7 +39,8 @@ android {
 
 dependencies {
     val fragment_version = "1.8.3"
-
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.store)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Заголовок привычки" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выберите дни недели:" />
+
+    <LinearLayout
+        android:id="@+id/days_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Кнопки для выбора дней недели -->
+        <Button
+            android:id="@+id/btn_monday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пн" />
+        <Button
+            android:id="@+id/btn_tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вт" />
+        <Button
+            android:id="@+id/btn_wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ср" />
+        <Button
+            android:id="@+id/btn_thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Чт" />
+        <Button
+            android:id="@+id/btn_friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пт" />
+        <Button
+            android:id="@+id/btn_saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сб" />
+        <Button
+            android:id="@+id/btn_sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вс" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Дата начала:" />
+
+    <EditText
+        android:id="@+id/et_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ДД.ММ.ГГГГ" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Дата конца:" />
+
+    <EditText
+        android:id="@+id/et_end_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ДД.ММ.ГГГГ" />
+
+    <Button
+        android:id="@+id/btn_add_habit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Добавить привычку" />
+</LinearLayout>
