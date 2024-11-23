@@ -1,86 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="30dp">
 
     <EditText
         android:id="@+id/et_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Заголовок привычки" />
+        android:hint="Заголовок привычки"
+        android:fontFamily="@font/noto_sans_bold"/>
 
     <TextView
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Выберите дни недели:" />
+        android:text="Выберите дни недели:"
+        android:fontFamily="@font/noto_sans_bold"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/days_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:fontFamily="@font/noto_sans"
+        android:paddingLeft="30dp">
 
         <!-- Кнопки для выбора дней недели -->
         <Button
             android:id="@+id/btn_monday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Пн" />
+            android:backgroundTint="@color/violet"
+            android:fontFamily="@font/noto_sans"
+            android:text="Пн"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/btn_tuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Вт" />
+            android:fontFamily="@font/noto_sans"
+            android:backgroundTint="@color/violet"
+            android:text="Вт"
+            app:layout_constraintStart_toEndOf="@id/btn_monday"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/btn_wednesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ср" />
+            android:fontFamily="@font/noto_sans"
+            android:backgroundTint="@color/violet"
+            android:text="Ср"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_monday" />
         <Button
             android:id="@+id/btn_thursday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Чт" />
+            android:backgroundTint="@color/violet"
+            android:text="Чт"
+            android:fontFamily="@font/noto_sans"
+            app:layout_constraintTop_toBottomOf="@id/btn_monday"
+            app:layout_constraintStart_toEndOf="@id/btn_wednesday"/>
+
         <Button
             android:id="@+id/btn_friday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Пт" />
+            android:fontFamily="@font/noto_sans"
+            android:backgroundTint="@color/violet"
+            android:text="Пт"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_wednesday" />
         <Button
             android:id="@+id/btn_saturday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Сб" />
+            android:text="Сб"
+            android:fontFamily="@font/noto_sans"
+            android:backgroundTint="@color/violet"
+            app:layout_constraintTop_toBottomOf="@id/btn_thursday"
+            app:layout_constraintStart_toEndOf="@id/btn_friday"/>
+
         <Button
             android:id="@+id/btn_sunday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Вс" />
-    </LinearLayout>
+            android:fontFamily="@font/noto_sans"
+            android:text="Вс"
+            app:layout_constraintStart_toStartOf="parent"
+            android:backgroundTint="@color/violet"
+            app:layout_constraintTop_toBottomOf="@id/btn_friday" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans_bold"
         android:text="Дата начала:" />
 
     <EditText
         android:id="@+id/et_start_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ДД.ММ.ГГГГ" />
+        android:fontFamily="@font/noto_sans"
+        android:hint="дд.мм.гггг"
+        android:focusable="false" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans_bold"
         android:text="Дата конца:" />
 
     <EditText
         android:id="@+id/et_end_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ДД.ММ.ГГГГ" />
+        android:fontFamily="@font/noto_sans"
+        android:hint="дд.мм.гггг"
+        android:focusable="false" />
+
+    <CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
 
     <Button
         android:id="@+id/btn_add_habit"

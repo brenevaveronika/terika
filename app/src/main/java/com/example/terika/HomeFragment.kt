@@ -32,6 +32,7 @@ import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -40,16 +41,17 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private lateinit var calendarView : WeekCalendarView
+    private lateinit var calendarView: WeekCalendarView
     private var param1: String? = null
     private var param2: String? = null
+    private val originalHabitsList = mutableListOf<Habit>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CalendarAdapter
     private val calendarDates = mutableListOf<CalendarDay>()
     val habitsList = mutableListOf<Habit>()
+    val affirmationsList = mutableListOf<Affirmation>()
     private lateinit var habitsAdapter: HabitAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,7 @@ class HomeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        Log.d(TAG, "onCreate called")
 
     }
 
@@ -67,10 +70,14 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
+        Log.d(TAG, "onCreateView called")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated called")
+
         val plusButton = view.findViewById<View>(R.id.plusButton)
         val habitDialog = HabitDialog(requireContext())
         plusButton.setOnClickListener {
@@ -92,12 +99,23 @@ class HomeFragment : Fragment() {
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.findViewById<TextView>(R.id.calendarDayText)
             lateinit var day: CalendarDay
+
             init {
                 view.setOnClickListener {
-                    // Use the CalendarDay associated with this container.
+                    // Обновляем данные фрагмента при нажатии на день
+                    Log.d(TAG, "Day clicked: ${day.date}") // Логируем нажатие
+                    val fragment =
+                        parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
+                    if (fragment != null) {
+                        fragment.updateFragmentData(day.date)
+                    } else {
+                        Log.d(TAG, "HomeFragment is null")
+                    }
+                    Log.d(TAG, "updateFragmentData called") // Логируем вызов метода
                 }
             }
         }
+
 
         calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
             // Called only when a new container is needed.
@@ -105,6 +123,7 @@ class HomeFragment : Fragment() {
 
             // Called every time we need to reuse a container.
             override fun bind(container: DayViewContainer, data: WeekDay) {
+                container.day = CalendarDay(data.date)
                 container.textView.text = data.date.dayOfMonth.toString()
             }
         }
@@ -120,21 +139,55 @@ class HomeFragment : Fragment() {
         // настройка HabitRecyclerView
 
         val habitsRecycler: RecyclerView = view.findViewById(R.id.habitRecycler)
-        habitsAdapter = HabitAdapter( { habit ->
+        habitsAdapter = HabitAdapter({ habit ->
             // Handle the click event
             val fragment = HabitDetailFragment.newInstance(habit)
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.container, fragment) // Use your container ID
             transaction.addToBackStack(null) // Optional: add to back stack
-            transaction.commit()}, habitsList)
+            transaction.commit()
+        }, habitsList)
         habitsRecycler.layoutManager = LinearLayoutManager(context)
         habitsRecycler.adapter = habitsAdapter
 
-        fetchHabits()
 
-        // habitsAdapter.data = HabitGenerator.generateHabit(5)
-        super.onViewCreated(view, savedInstanceState)
-        // что-то здесь для того чтобы листенер повесить?
+        fetchHabits()
+        fetchAffirmations()
+        val fragment = parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
+        if (fragment != null) {
+            fragment.updateFragmentData(LocalDate.now())
+        } else {
+            Log.d(TAG, "HomeFragment is null")
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView called")
+    }
+
+    private fun fetchAffirmations() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("affirmations")
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && !snapshot.isEmpty) {
+                    affirmationsList.clear() // Очищаем список аффирмаций
+                    for (document in snapshot.documents) {
+                        val affirmation = document.toObject(Affirmation::class.java)
+                        affirmation?.let {
+                            it.id = document.id // Получаем ID документа
+                            affirmationsList.add(it) // Добавляем в список аффирмаций
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "Current data: null")
+                }
+            }
     }
 
     private fun fetchHabits() {
@@ -147,12 +200,14 @@ class HomeFragment : Fragment() {
                 }
 
                 if (snapshot != null && !snapshot.isEmpty) {
-                    habitsList.clear()
+                    originalHabitsList.clear() // Очищаем оригинальный список
+                    habitsList.clear() // Очищаем текущий список для обновления
                     for (document in snapshot.documents) {
                         val habit = document.toObject(Habit::class.java)
                         habit?.let {
-                            it.id = document.id // Получаем ID документа
-                            habitsList.add(it)
+                            it.id = document.id // Получаем ID документ
+                            originalHabitsList.add(it) // Добавляем в оригинальный список
+                            habitsList.add(it) // Добавляем в текущий список
                         }
                     }
                     habitsAdapter.notifyDataSetChanged() // Обновляем адаптер
@@ -160,6 +215,61 @@ class HomeFragment : Fragment() {
                     Log.d(TAG, "Current data: null")
                 }
             }
+    }
+
+
+    fun updateFragmentData(selectedDate: LocalDate) {
+        Log.d(TAG, "Selected date: $selectedDate")
+        val dayNumber = calculateDayNumber(selectedDate)
+        val affirmation = getRandomAffirmation()
+        val habitsForDay = getHabitsForDay(selectedDate)
+
+        // Обновляем UI
+        updateDayNumber(dayNumber)
+        updateAffirmation(affirmation)
+        updateHabitList(habitsForDay)
+    }
+
+    private fun calculateDayNumber(date: LocalDate): Int {
+        val day = date.dayOfMonth.toString().map { it.toString().toInt() }.sum()
+        val month = date.monthValue.toString().map { it.toString().toInt() }.sum()
+        val year = date.year.toString().map { it.toString().toInt() }.sum()
+        var result = day + month + year
+        if (result > 9) {
+            result = result.toString().map { it.toString().toInt() }.sum()
+        }
+        return result
+    }
+
+    private fun getRandomAffirmation(): String {
+        return if (affirmationsList.isNotEmpty()) {
+            affirmationsList.random().text // Возвращаем случайную аффирмацию
+        } else {
+            "Нет доступных аффирмаций" // Возвращаем сообщение по умолчанию, если список пуст
+        }
+    }
+
+    private fun getHabitsForDay(date: LocalDate): List<Habit> {
+        val dayOfWeek = date.dayOfWeek.toString()
+        return originalHabitsList.filter { it.subheading.contains(dayOfWeek) } // Фильтруем оригинальный список
+    }
+
+    private fun updateDayNumber(dayNumber: Int) {
+        val dayNumberTextView =
+            view?.findViewById<TextView>(R.id.dayNumber) // Убедитесь, что вы используете правильный ID
+        dayNumberTextView?.text = dayNumber.toString()
+    }
+
+    private fun updateAffirmation(affirmation: String) {
+        val affirmationTextView =
+            view?.findViewById<TextView>(R.id.affirmation) // Убедитесь, что вы используете правильный ID
+        affirmationTextView?.text = affirmation
+    }
+
+    private fun updateHabitList(habits: List<Habit>) {
+        habitsList.clear() // Очищаем текущий список
+        habitsList.addAll(habits) // Добавляем отфильтрованные привычки
+        habitsAdapter.notifyDataSetChanged() // Обновляем адаптер
     }
 
 
