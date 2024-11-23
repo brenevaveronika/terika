@@ -32,12 +32,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val fs = Firebase.firestore
+        val diaryFragment = DiaryFragment() // Создаем экземпляр DiaryFragment
 
         loadFragment(HomeFragment())
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
         bottomNav.menu.findItem(R.id.home).setChecked(true)
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
+                R.id.home -> {
+                    loadFragment(HomeFragment())
+
+                    true
+                }
                 R.id.diary -> {
                     loadFragment(DiaryFragment())
                     true
@@ -46,17 +52,9 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(HabitTrackerFragment())
                     true
                 }
-                R.id.home -> {
-                    loadFragment(HomeFragment())
 
-                    true
-                }
                 R.id.articles -> {
                     loadFragment(ArticlesFragment())
-                    true
-                }
-                R.id.settings -> {
-                    loadFragment(SettingFragment())
                     true
                 }
 

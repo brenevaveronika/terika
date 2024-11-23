@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
@@ -53,6 +54,7 @@ class HomeFragment : Fragment() {
     val habitsList = mutableListOf<Habit>()
     val affirmationsList = mutableListOf<Affirmation>()
     private lateinit var habitsAdapter: HabitAdapter
+    var selectedDate = LocalDate.now()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +110,7 @@ class HomeFragment : Fragment() {
                         parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
                     if (fragment != null) {
                         fragment.updateFragmentData(day.date)
+                        selectedDate = day.date
                     } else {
                         Log.d(TAG, "HomeFragment is null")
                     }
@@ -158,6 +161,25 @@ class HomeFragment : Fragment() {
             fragment.updateFragmentData(LocalDate.now())
         } else {
             Log.d(TAG, "HomeFragment is null")
+        }
+
+        val arrowIcon = view.findViewById<ImageView>(R.id.arrowIcon)
+        arrowIcon.setOnClickListener {
+
+            val existingFragment = parentFragmentManager.findFragmentById(R.id.container) as? DiaryFragment
+
+            Log.d(TAG, "$existingFragment")
+            if (existingFragment != null) {
+                // Если фрагмент существует, обновите его данные
+                existingFragment.updateDiaryData(selectedDate)
+            } else {
+                // Если фрагмент не существует, создайте новый
+                val fragment = DiaryFragment.newInstance(selectedDate)
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.replace(R.id.container, fragment) // Используйте ваш ID контейнера
+                transaction.addToBackStack(null) // Добавляем в стек возврата
+                transaction.commit()
+            }
         }
     }
 
