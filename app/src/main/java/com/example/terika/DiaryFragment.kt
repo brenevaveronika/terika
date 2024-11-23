@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class DiaryFragment : Fragment() {
 
@@ -37,7 +38,8 @@ class DiaryFragment : Fragment() {
 
         // Отобразите дату в заголовке
         val dateTextView = view.findViewById<TextView>(R.id.dateTextView)
-        dateTextView.text = selectedDate?.toString() // Или отформатируйте дату по желанию
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        dateTextView.text = selectedDate?.format(formatter) // Или отформатируйте дату по желанию
 
         val sumOfDigits = selectedDate?.let { calculateDayNumber(it) }
         if (sumOfDigits != null) {
@@ -45,6 +47,8 @@ class DiaryFragment : Fragment() {
         } // Получите описание для дня
 
         // Здесь можно добавить код для отображения информации о дне
+        val numTextView = view.findViewById<TextView>(R.id.numText)
+        numTextView.text = "Число дня: $sumOfDigits"
     }
 
     fun updateDiaryData(date: LocalDate) {

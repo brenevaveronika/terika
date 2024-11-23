@@ -1,6 +1,7 @@
 package com.example.terika
 
 import android.content.ContentValues.TAG
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -22,7 +23,9 @@ import com.example.terika.habit_tracker.Habit
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
@@ -100,12 +103,34 @@ class HomeFragment : Fragment() {
         calendarView = view.findViewById(R.id.weekCalendarView)
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.findViewById<TextView>(R.id.calendarDayText)
-            lateinit var day: CalendarDay
+            lateinit var day: WeekDay
 
             init {
                 view.setOnClickListener {
                     // Обновляем данные фрагмента при нажатии на день
                     Log.d(TAG, "Day clicked: ${day.date}") // Логируем нажатие
+                    if (day.position == WeekDayPosition.RangeDate) {
+                        // Keep a reference to any previous selection
+                        // in case we overwrite it and need to reload it.
+                        val currentSelection = selectedDate
+                        if (currentSelection == day.date) {
+                            // If the user clicks the same date, clear selection.
+                            selectedDate = null
+                            // Reload this date so the dayBinder is called
+                            // and we can REMOVE the selection background.
+                            calendarView.notifyDateChanged(currentSelection)
+                        } else {
+                            selectedDate = day.date
+                            // Reload the newly selected date so the dayBinder is
+                            // called and we can ADD the selection background.
+                            calendarView.notifyDateChanged(day.date)
+                            if (currentSelection != null) {
+                                // We need to also reload the previously selected
+                                // date so we can REMOVE the selection background.
+                                calendarView.notifyDateChanged(currentSelection)
+                            }
+                        }
+                    }
                     val fragment =
                         parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
                     if (fragment != null) {
@@ -126,8 +151,29 @@ class HomeFragment : Fragment() {
 
             // Called every time we need to reuse a container.
             override fun bind(container: DayViewContainer, data: WeekDay) {
-                container.day = CalendarDay(data.date)
+                container.day = WeekDay(data.date, WeekDayPosition.RangeDate)
                 container.textView.text = data.date.dayOfMonth.toString()
+
+                container.day = data
+                val day = data
+                val textView = container.textView
+                textView.text = day.date.dayOfMonth.toString()
+                if (day.position == WeekDayPosition.RangeDate) {
+                    // Show the month dates. Remember that views are reused!
+                    textView.visibility = View.VISIBLE
+                    if (day.date == selectedDate) {
+                        // If this is the selected date, show a round background and change the text color.
+                        textView.setTextColor(Color.MAGENTA)
+                        textView.setBackgroundResource(R.drawable.rounded)
+                    } else {
+                        // If this is NOT the selected date, remove the background and reset the text color.
+                        textView.setTextColor(Color.BLACK)
+                        textView.background = null
+                    }
+                } else {
+                    // Hide in and out dates
+                    textView.visibility = View.INVISIBLE
+                }
             }
         }
 

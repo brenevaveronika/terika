@@ -17,6 +17,15 @@
         android:padding="10dp"
         android:fontFamily="@font/noto_sans_bold"/>
 
+    <TextView
+        android:id="@+id/numText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Число дня: "
+        android:padding="10dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:textSize="20sp"/>
+
     <!-- Поле для отображения информации о дне -->
     <ScrollView
         android:layout_width="wrap_content"
