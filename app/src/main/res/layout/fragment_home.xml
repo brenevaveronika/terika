@@ -32,7 +32,7 @@
         android:paddingStart="30dp"
         android:text="Здравствуйте,\nЕлена Вильевна!"
         android:textColor="@color/deepBlue"
-        android:textSize="30sp"
+        android:textSize="24sp"
         />
 
     <TextView
@@ -40,9 +40,9 @@
         android:layout_height="wrap_content"
         android:text="Эстетика дня"
         android:textColor="@color/deepBlue"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:fontFamily="@font/noto_sans_bold"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="12dp"
         android:paddingStart="30dp"
         android:layout_marginBottom="12dp"
         />
@@ -208,7 +208,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/habitRecycler"
-        android:layout_margin="30dp"
+        android:layout_marginHorizontal="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

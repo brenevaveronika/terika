@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.terika.habit_tracker.Habit
+import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,12 +19,14 @@ private const val ARG_PARAM2 = "param2"
 
 class HabitDetailFragment : Fragment() {
 
+    private lateinit var db: FirebaseFirestore
+
     companion object {
         private const val ARG_HABIT = "habit"
         fun newInstance(habit: Habit): HabitDetailFragment {
             val fragment = HabitDetailFragment()
             val args = Bundle()
-            args.putParcelable(ARG_HABIT, habit) // Assuming Habit implements Parcelable
+            args.putParcelable(ARG_HABIT, habit)
             fragment.arguments = args
             return fragment
         }
@@ -32,12 +36,21 @@ class HabitDetailFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_habit_detail, container, false)
         val habit = arguments?.getParcelable<Habit>(ARG_HABIT)
 
+        db = FirebaseFirestore.getInstance()
+
+
+        val deleteButton: Button = view.findViewById(R.id.deleteButton)
+        deleteButton.setOnClickListener {
+            if (habit != null) {
+                deleteHabit(habit.id) // Передаем ID привычки для удаления
+            }
+        }
+
         val backButton: Button = view.findViewById(R.id.backButton)
         backButton.setOnClickListener {
             requireActivity().onBackPressed()
         }
 
-        // Use habit data to populate your views here
         val headingTextView: TextView = view.findViewById(R.id.headingTextView)
         val subheadingTextView: TextView = view.findViewById(R.id.subheadingTextView)
         val habitImageView: ImageView = view.findViewById(R.id.habitImageView)
@@ -53,4 +66,20 @@ class HabitDetailFragment : Fragment() {
         }
         return view
     }
+
+    private fun deleteHabit(habitId: String) {
+        db.collection("habits") // Укажите имя вашей коллекции
+            .document(habitId) // Используем ID привычки для удаления
+            .delete()
+            .addOnSuccessListener {
+                // успех
+                Toast.makeText(requireContext(), "Привычка удалена", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressed() // Возвращаемся на предыдущий экран
+            }
+            .addOnFailureListener { e ->
+                // ошибки
+                Toast.makeText(requireContext(), "Ошибка при удалении: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 }
+

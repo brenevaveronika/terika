@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.terika.Affirmation
+import com.example.terika.affirmation.Affirmation
 import com.example.terika.R
 
 class AffirmationAdapter(private val affirmations: List<Affirmation>) :
@@ -17,7 +17,7 @@ class AffirmationAdapter(private val affirmations: List<Affirmation>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AffirmationViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_affirmation, parent, false) // Создайте разметку для элемента
+            .inflate(R.layout.item_affirmation, parent, false)
         return AffirmationViewHolder(view)
     }
 

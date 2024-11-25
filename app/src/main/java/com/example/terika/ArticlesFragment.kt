@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.terika.adapter.AffirmationAdapter
+import com.example.terika.affirmation.Affirmation
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ArticlesFragment : Fragment() {
@@ -31,7 +32,7 @@ class ArticlesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        fetchAffirmations() // Загружаем аффирмации
+        fetchAffirmations() // загружаем аффирмации из БД
     }
 
     private fun fetchAffirmations() {
@@ -44,15 +45,14 @@ class ArticlesFragment : Fragment() {
                 }
 
                 if (snapshot != null && !snapshot.isEmpty) {
-                    affirmationsList.clear() // Очищаем список перед добавлением новых данных
+                    affirmationsList.clear() // очищаем список
                     for (document in snapshot.documents) {
                         val affirmation = document.toObject(Affirmation::class.java)
                         affirmation?.let {
-                            it.id = document.id // Получаем ID документа
-                            affirmationsList.add(it) // Добавляем аффирмацию в список
+                            it.id = document.id
+                            affirmationsList.add(it) // дбавление аффирмации в список
                         }
                     }
-                    // Устанавливаем адаптер с обновленным списком аффирмаций
                     adapter = AffirmationAdapter(affirmationsList)
                     recyclerView.adapter = adapter
                 } else {

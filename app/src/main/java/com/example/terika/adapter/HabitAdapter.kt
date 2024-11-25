@@ -34,8 +34,8 @@ class HabitAdapter(private val onHabitClick: (Habit) -> Unit, private val habits
                 holder.habitCheckboxCircleFill.setImageResource(R.drawable.habit_checkbox_circle_fill)
             }
             holder.habitCheckboxCircleFill.setOnClickListener {
-                habits[position].isCompleted = !habits[position].isCompleted // Переключаем состояние
-                notifyItemChanged(position) // Обновляем элемент
+                habits[position].isCompleted = !habits[position].isCompleted // переключение состояния
+                notifyItemChanged(position) // обновление элемента
             }
             holder.habitCheckboxCircleLine.setImageResource(it.checkboxLineId)
             holder.habitHeading.setOnClickListener {

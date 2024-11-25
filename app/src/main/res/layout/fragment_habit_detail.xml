@@ -30,4 +30,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Назад" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Удалить привычку"
+        android:backgroundTint="@color/pinkypie"/>
 </LinearLayout>

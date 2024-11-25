@@ -2,27 +2,11 @@ package com.example.terika
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.example.terika.ArticlesFragment
-import com.example.terika.DiaryFragment
-import com.example.terika.HabitTrackerFragment
-import com.example.terika.HomeFragment
-import com.example.terika.SettingFragment
-import com.example.terika.adapter.HabitAdapter
-import com.example.terika.aesthetic_cards.AestheticCard
-import com.example.terika.habit_tracker.Habit
 // import com.example.terika.habit_tracker.HabitGenerator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 

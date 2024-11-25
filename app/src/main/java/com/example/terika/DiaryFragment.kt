@@ -28,7 +28,6 @@ class DiaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         firestore = FirebaseFirestore.getInstance()
         return inflater.inflate(R.layout.fragment_diary, container, false)
     }
@@ -36,28 +35,23 @@ class DiaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Отобразите дату в заголовке
         val dateTextView = view.findViewById<TextView>(R.id.dateTextView)
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        dateTextView.text = selectedDate?.format(formatter) // Или отформатируйте дату по желанию
+        dateTextView.text = selectedDate?.format(formatter)
 
         val sumOfDigits = selectedDate?.let { calculateDayNumber(it) }
         if (sumOfDigits != null) {
             fetchDescriptionForDay(sumOfDigits)
-        } // Получите описание для дня
-
-        // Здесь можно добавить код для отображения информации о дне
+        }
         val numTextView = view.findViewById<TextView>(R.id.numText)
         numTextView.text = "Число дня: $sumOfDigits"
     }
 
     fun updateDiaryData(date: LocalDate) {
         selectedDate = date
-        // Обновите UI с новой датой
+        //обновляем UI
         val dateTextView = view?.findViewById<TextView>(R.id.dateTextView)
-        dateTextView?.text = selectedDate?.toString() // Или отформатируйте дату по желанию
-
-        // Здесь можно добавить код для обновления информации о дне
+        dateTextView?.text = selectedDate?.toString()
     }
 
     private fun calculateDayNumber(date: LocalDate): Int {
@@ -73,27 +67,26 @@ class DiaryFragment : Fragment() {
 
     private fun fetchDescriptionForDay(day: Int) {
         firestore.collection("numbers")
-            .document(day.toString()) // Используем сумму как идентификатор документа
+            .document(day.toString())
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    val description = document.getString("long") // Получаем текстовое поле "long"
-                    updateUI(description) // Обновляем пользовательский интерфейс
+                    val description = document.getString("long")
+                    updateUI(description)
                 } else {
                     Log.d("DiaryFragment", "No such document")
-                    updateUI("Описание не найдено") // Обработка случая, если документ не найден
+                    updateUI("Описание не найдено")
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w("DiaryFragment", "Error getting document: ", exception)
-                updateUI("Ошибка при получении описания") // Обработка ошибки
+                updateUI("Ошибка при получении описания")
             }
     }
 
-    // Метод для обновления пользовательского интерфейса
     private fun updateUI(description: String?) {
         val textView: TextView = view?.findViewById(R.id.diaryContentTextView) ?: return
-        textView.text = description ?: "Описание не найдено" // Обработка случая, если описание равно null
+        textView.text = description ?: "Описание не найдено"
     }
 
     companion object {

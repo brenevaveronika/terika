@@ -1,4 +1,4 @@
-package com.example.terika
+package com.example.terika.affirmation
 
 data class Affirmation(
     var id: String = "",

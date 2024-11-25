@@ -15,28 +15,21 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.terika.adapter.CalendarAdapter
 import com.example.terika.adapter.HabitAdapter
-import com.example.terika.calendar.CalendarDay
+import com.example.terika.affirmation.Affirmation
 import com.example.terika.habit_tracker.Habit
 // import com.example.terika.habit_tracker.HabitGenerator
-import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.view.CalendarView
-import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -51,9 +44,6 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private val originalHabitsList = mutableListOf<Habit>()
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: CalendarAdapter
-    private val calendarDates = mutableListOf<CalendarDay>()
     val habitsList = mutableListOf<Habit>()
     val affirmationsList = mutableListOf<Affirmation>()
     private lateinit var habitsAdapter: HabitAdapter
@@ -75,13 +65,11 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
-        Log.d(TAG, "onCreateView called")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated called")
 
         val plusButton = view.findViewById<View>(R.id.plusButton)
         val habitDialog = HabitDialog(requireContext())
@@ -319,25 +307,34 @@ class HomeFragment : Fragment() {
 
     private fun getHabitsForDay(date: LocalDate): List<Habit> {
         val dayOfWeek = date.dayOfWeek.toString()
-        return originalHabitsList.filter { it.subheading.contains(dayOfWeek) } // Фильтруем оригинальный список
+        val daysOfWeek = mapOf(
+            "MONDAY" to "ПН",
+            "TUESDAY" to "ВТ",
+            "WEDNESDAY" to "СР",
+            "THURSDAY" to "ЧТ",
+            "FRIDAY" to "ПТ",
+            "SATURDAY" to "СБ",
+            "SUNDAY" to "ВС"
+        )
+        return originalHabitsList.filter { it.subheading.contains(daysOfWeek.getValue(dayOfWeek)) } // фильтруем оригинальный список
     }
 
     private fun updateDayNumber(dayNumber: Int) {
         val dayNumberTextView =
-            view?.findViewById<TextView>(R.id.dayNumber) // Убедитесь, что вы используете правильный ID
+            view?.findViewById<TextView>(R.id.dayNumber)
         dayNumberTextView?.text = dayNumber.toString()
     }
 
     private fun updateAffirmation(affirmation: String) {
         val affirmationTextView =
-            view?.findViewById<TextView>(R.id.affirmation) // Убедитесь, что вы используете правильный ID
+            view?.findViewById<TextView>(R.id.affirmation)
         affirmationTextView?.text = affirmation
     }
 
     private fun updateHabitList(habits: List<Habit>) {
-        habitsList.clear() // Очищаем текущий список
-        habitsList.addAll(habits) // Добавляем отфильтрованные привычки
-        habitsAdapter.notifyDataSetChanged() // Обновляем адаптер
+        habitsList.clear()
+        habitsList.addAll(habits)
+        habitsAdapter.notifyDataSetChanged()
     }
 
 

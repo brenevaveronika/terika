@@ -15,14 +15,13 @@ import com.example.terika.calendar.CalendarDay
 class CalendarAdapter(private val dates: List<CalendarDay>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
     inner class CalendarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val dateTextView: TextView = view.findViewById(R.id.dateNumberTextView) // Adjust the id as per your layout
+        val dateTextView: TextView = view.findViewById(R.id.dateNumberTextView)
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(date: CalendarDay) {
             dateTextView.text = date.date.dayOfMonth.toString()
-            // Change background color if it's today
             if (date.isToday) {
-                dateTextView.setBackgroundColor(Color.parseColor("#FF69B4")) // Highlight color for today
+                dateTextView.setBackgroundColor(Color.parseColor("#FF69B4"))
 
             } else {
                 dateTextView.setBackgroundColor(Color.TRANSPARENT)
