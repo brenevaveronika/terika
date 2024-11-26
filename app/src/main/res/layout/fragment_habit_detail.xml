@@ -3,7 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="30dp">
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Назад"
+        android:backgroundTint="@color/water"
+        android:fontFamily="@font/noto_sans_bold"/>
 
     <ImageView
         android:id="@+id/habitImageView"
@@ -16,25 +24,24 @@
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:textColor="@color/deepBlue"/>
+        android:textColor="@color/deepBlue"
+        android:fontFamily="@font/noto_sans"/>
 
     <TextView
         android:id="@+id/subheadingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:textColor="@color/deepBlue"/>
+        android:textColor="@color/deepBlue"
+        android:fontFamily="@font/noto_sans"/>
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Назад" />
+
 
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Удалить привычку"
-        android:backgroundTint="@color/pinkypie"/>
+        android:backgroundTint="@color/pinkypie"
+        android:fontFamily="@font/noto_sans_bold"/>
 </LinearLayout>

@@ -88,12 +88,24 @@ class HabitDialog(context: Context) : Dialog(context) {
                 etStartDate.setText(formattedDate)
                 Log.d("HabitDialog", "Start date set: $formattedDate")
             } else if (selectedDateType == "end") {
+                val startDateText = etStartDate.text.toString()
+                if (startDateText.isNotEmpty()) {
+                    val startDate = dateFormat.parse(startDateText)
+                    // Compare the dates
+                    if (startDate != null && selectedDate.time <= startDate) {
+                        etEndDate.setText("")
+                        Log.d("HabitDialog", "End date cleared: $formattedDate (must be greater than start date)")
+                        Toast.makeText(context, "Конечная дата должна быть позже начальной!", Toast.LENGTH_SHORT).show()
+                        return@setOnDateChangeListener
+                    }
+                }
                 etEndDate.setText(formattedDate)
                 Log.d("HabitDialog", "End date set: $formattedDate")
             }
 
             calendarView.visibility = View.GONE
         }
+
 
         findViewById<Button>(R.id.btn_add_habit).setOnClickListener {
             val heading = etHeading.text.toString()

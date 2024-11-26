@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/violet"
             android:fontFamily="@font/noto_sans"
-            android:text="Пн"
+            android:text="ПН"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:backgroundTint="@color/violet"
-            android:text="Вт"
+            android:text="ВТ"
             app:layout_constraintStart_toEndOf="@id/btn_monday"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:backgroundTint="@color/violet"
-            android:text="Ср"
+            android:text="СР"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_monday" />
         <Button
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/violet"
-            android:text="Чт"
+            android:text="ЧТ"
             android:fontFamily="@font/noto_sans"
             app:layout_constraintTop_toBottomOf="@id/btn_monday"
             app:layout_constraintStart_toEndOf="@id/btn_wednesday"/>
@@ -74,14 +74,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:backgroundTint="@color/violet"
-            android:text="Пт"
+            android:text="ПТ"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_wednesday" />
         <Button
             android:id="@+id/btn_saturday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Сб"
+            android:text="СБ"
             android:fontFamily="@font/noto_sans"
             android:backgroundTint="@color/violet"
             app:layout_constraintTop_toBottomOf="@id/btn_thursday"
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
-            android:text="Вс"
+            android:text="ВС"
             app:layout_constraintStart_toStartOf="parent"
             android:backgroundTint="@color/violet"
             app:layout_constraintTop_toBottomOf="@id/btn_friday" />
@@ -138,5 +138,6 @@
         android:id="@+id/btn_add_habit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Добавить привычку" />
+        android:text="Добавить привычку"
+        android:backgroundTint="@color/purplePlum"/>
 </LinearLayout>

@@ -28,6 +28,7 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
@@ -63,7 +64,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
 
         // настройка CalendarRecyclerView
         val titlesContainer = view.findViewById<ViewGroup>(R.id.titlesContainer)
-        val daysOfWeek = daysOfWeek()
+        val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY)
         titlesContainer.children
             .map { it as TextView }
             .forEachIndexed { index, textView ->
@@ -150,16 +150,13 @@ class HomeFragment : Fragment() {
                     // Show the month dates. Remember that views are reused!
                     textView.visibility = View.VISIBLE
                     if (day.date == selectedDate) {
-                        // If this is the selected date, show a round background and change the text color.
                         textView.setTextColor(Color.MAGENTA)
                         textView.setBackgroundResource(R.drawable.rounded)
                     } else {
-                        // If this is NOT the selected date, remove the background and reset the text color.
                         textView.setTextColor(Color.BLACK)
                         textView.background = null
                     }
                 } else {
-                    // Hide in and out dates
                     textView.visibility = View.INVISIBLE
                 }
             }
@@ -167,9 +164,9 @@ class HomeFragment : Fragment() {
 
         val currentDate = LocalDate.now()
         val currentMonth = YearMonth.now()
-        val startDate = currentMonth.minusMonths(100).atStartOfMonth() // Adjust as needed
-        val endDate = currentMonth.plusMonths(100).atEndOfMonth() // Adjust as needed
-        val firstDayOfWeek = firstDayOfWeekFromLocale() // Available from the library
+        val startDate = currentMonth.minusMonths(100).atStartOfMonth()
+        val endDate = currentMonth.plusMonths(100).atEndOfMonth()
+        val firstDayOfWeek = DayOfWeek.MONDAY
         calendarView.setup(startDate, endDate, firstDayOfWeek)
         calendarView.scrollToWeek(currentDate)
 
