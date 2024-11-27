@@ -10,8 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.terika.R
 import com.example.terika.habit_tracker.Habit
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-class HabitAdapter(private val onHabitClick: (Habit) -> Unit, private val habits: List<Habit>):
+class HabitAdapter(private val onHabitClick: (Habit) -> Unit, private val habits: List<Habit>, var selectedDate: LocalDate):
     RecyclerView.Adapter<HabitAdapter.HabitViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
@@ -24,18 +28,21 @@ class HabitAdapter(private val onHabitClick: (Habit) -> Unit, private val habits
 
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
         habits[position].let {
+
             holder.habitIcon.setImageResource(it.imageResId)
             holder.habitHeading.text = it.heading
             holder.habitSubheading.text = it.subheading
-            if (it.isCompleted) {
+            val isCompleted = habits[position].completionStatus[selectedDate.toString()] ?: false
+            if (isCompleted) {
                 holder.habitCheckboxCircleFill.setImageResource(R.drawable.check)
-            }
-            else {
+            } else {
                 holder.habitCheckboxCircleFill.setImageResource(R.drawable.habit_checkbox_circle_fill)
             }
             holder.habitCheckboxCircleFill.setOnClickListener {
-                habits[position].isCompleted = !habits[position].isCompleted // переключение состояния
-                notifyItemChanged(position) // обновление элемента
+                val newStatus = !isCompleted
+                habits[position].completionStatus[selectedDate.toString()] = newStatus
+                notifyItemChanged(position)
+                updateHabitInFirestore(habits[position], selectedDate.toString(), newStatus)
             }
             holder.habitCheckboxCircleLine.setImageResource(it.checkboxLineId)
             holder.habitHeading.setOnClickListener {
@@ -52,15 +59,22 @@ class HabitAdapter(private val onHabitClick: (Habit) -> Unit, private val habits
         val habitCheckboxCircleLine: ImageView = itemView.findViewById(R.id.habitCheckboxCircleLine)
     }
 
-    private fun updateHabitInFirestore(habit: Habit) {
+    private fun updateHabitInFirestore(habit: Habit, date: String, newStatus: Boolean) {
         val db = FirebaseFirestore.getInstance()
         db.collection("habits").document(habit.id)
-            .update("isCompleted", habit.isCompleted)
+            .update("completionStatus.$date", newStatus)
             .addOnSuccessListener {
-                Log.d(TAG, "Habit successfully updated!")
+                Log.d(TAG, "Habit successfully updated for date: $date!")
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error updating habit", e)
             }
     }
+    fun updateSelectedDate(newDate: LocalDate) {
+        if (selectedDate != null) {
+            this.selectedDate = newDate
+        }
+        notifyDataSetChanged() // Обновляем адаптер
+    }
+
 }

@@ -1,135 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".HabitTrackerFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        tools:context=".HabitTrackerFragment">
 
-        <TextView
-            android:id="@+id/textView2"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_bold"
-            android:paddingStart="30dp"
-            android:text="Привычки на сегодня"
-            android:textColor="@color/deepBlue"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="20dp">
 
-        <ImageButton
-            android:contentDescription="Plus Button"
-            android:id="@+id/plusButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/lilacPetalsDark"
-            android:src="@drawable/baseline_add_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/deepBlue"
-            android:layout_marginEnd="30dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_bold"
+                android:paddingStart="30dp"
+                android:text="Привычки на сегодня"
+                android:textColor="@color/deepBlue"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/habitRecycler"
-        android:layout_marginHorizontal="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <ImageButton
+                android:contentDescription="Plus Button"
+                android:id="@+id/plusButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/lilacPetalsDark"
+                android:src="@drawable/baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/deepBlue"
+                android:layout_marginEnd="30dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/habitRecycler"
+            android:layout_marginHorizontal="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/diaryHeading"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_bold"
-            android:paddingStart="30dp"
-            android:text="Дневник эмоций"
-            android:textColor="@color/deepBlue"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="20dp">
 
-        <ImageButton
-            android:contentDescription="Plus Button"
-            android:id="@+id/plusButton2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/lilacPetalsDark"
-            android:src="@drawable/baseline_add_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/deepBlue"
-            android:layout_marginEnd="30dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/diaryHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_bold"
+                android:paddingStart="30dp"
+                android:text="Дневник эмоций"
+                android:textColor="@color/deepBlue"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_marginHorizontal="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <ImageButton
+                android:contentDescription="Plus Button"
+                android:id="@+id/plusButton2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/lilacPetalsDark"
+                android:src="@drawable/baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/deepBlue"
+                android:layout_marginEnd="30dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/notesEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Заметки дня..."
-        android:inputType="textMultiLine"
-        android:lines="3"
-        android:gravity="top|start"
-        android:background="@drawable/rounded"
-        android:padding="8dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="12dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_marginHorizontal="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <!-- Mood selection buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginHorizontal="20dp">
-
-        <Button
-            android:id="@+id/happyButton"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/notesEditText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="😊 Отлично"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/pinkypie"
-            android:fontFamily="@font/noto_sans_bold"
-            android:textSize="12sp"/>
+            android:hint="Заметки дня..."
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:gravity="top|start"
+            android:background="@drawable/rounded"
+            android:padding="8dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="12dp"/>
 
-        <Button
-            android:id="@+id/calmButton"
-            android:layout_width="wrap_content"
+        <!-- Mood selection buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="😌 Хорошо"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/violet"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginHorizontal="20dp">
 
-        <Button
-            android:id="@+id/sadButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="😢 Плохо"
-            android:backgroundTint="@color/coldGrey"/>
+            <Button
+                android:id="@+id/happyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😊 Отлично"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/pinkypie"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="12sp"/>
+
+            <Button
+                android:id="@+id/calmButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😌 Хорошо"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/violet"/>
+
+            <Button
+                android:id="@+id/sadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="😢 Плохо"
+                android:backgroundTint="@color/coldGrey"/>
+        </LinearLayout>
+
+
+
     </LinearLayout>
-
-
-
-</LinearLayout>
+</ScrollView>

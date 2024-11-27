@@ -16,7 +16,7 @@ import com.example.terika.adapter.DiaryAdapter
 import com.example.terika.adapter.HabitAdapter
 import com.example.terika.diary.DiaryEntry
 import com.example.terika.habit_tracker.Habit
-import com.example.terika.habit_tracker.SwipeToDeleteCallback
+import com.example.terika.diary.SwipeToDeleteCallback
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 
@@ -61,7 +61,7 @@ class HabitTrackerFragment : Fragment() {
             transaction.replace(R.id.container, fragment) // Use your container ID
             transaction.addToBackStack(null) // Optional: add to back stack
             transaction.commit()
-        }, habitsList)
+        }, habitsList, selectedDate)
         habitsRecycler.layoutManager = LinearLayoutManager(context)
         habitsRecycler.adapter = habitsAdapter
 

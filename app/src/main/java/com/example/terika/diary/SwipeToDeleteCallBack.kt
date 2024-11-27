@@ -1,4 +1,4 @@
-package com.example.terika.habit_tracker
+package com.example.terika.diary
 
 import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper

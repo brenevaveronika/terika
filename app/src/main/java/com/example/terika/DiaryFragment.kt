@@ -62,6 +62,9 @@ class DiaryFragment : Fragment() {
         if (result > 9) {
             result = result.toString().map { it.toString().toInt() }.sum()
         }
+        if (result > 9) {
+            result = result.toString().map { it.toString().toInt() }.sum()
+        }
         return result
     }
 

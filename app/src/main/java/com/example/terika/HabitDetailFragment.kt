@@ -50,6 +50,14 @@ class HabitDetailFragment : Fragment() {
         backButton.setOnClickListener {
             requireActivity().onBackPressed()
         }
+        val editButton: Button = view.findViewById(R.id.editButton)
+        editButton.setOnClickListener {
+            if (habit != null) {
+                openEditHabitDialog(habit)
+            }
+            requireActivity().onBackPressed()
+        }
+
 
         val headingTextView: TextView = view.findViewById(R.id.headingTextView)
         val subheadingTextView: TextView = view.findViewById(R.id.subheadingTextView)
@@ -67,14 +75,20 @@ class HabitDetailFragment : Fragment() {
         return view
     }
 
+    private fun openEditHabitDialog(habit: Habit) {
+        val dialog = HabitDialog(requireContext())
+        dialog.setHabitData(habit) // Установите данные привычки в диалог
+        dialog.show()
+    }
+
     private fun deleteHabit(habitId: String) {
-        db.collection("habits") // Укажите имя вашей коллекции
-            .document(habitId) // Используем ID привычки для удаления
+        db.collection("habits")
+            .document(habitId)
             .delete()
             .addOnSuccessListener {
                 // успех
                 Toast.makeText(requireContext(), "Привычка удалена", Toast.LENGTH_SHORT).show()
-                requireActivity().onBackPressed() // Возвращаемся на предыдущий экран
+                requireActivity().onBackPressed()
             }
             .addOnFailureListener { e ->
                 // ошибки

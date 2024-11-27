@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.terika.adapter.HabitAdapter
 import com.example.terika.affirmation.Affirmation
 import com.example.terika.habit_tracker.Habit
+import com.google.android.material.bottomnavigation.BottomNavigationView
 // import com.example.terika.habit_tracker.HabitGenerator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kizitonwose.calendar.core.WeekDay
@@ -28,10 +29,13 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.util.Date
 import java.util.Locale
 
 
@@ -71,73 +75,74 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val plusButton = view.findViewById<View>(R.id.plusButton)
-        val habitDialog = HabitDialog(requireContext())
-        plusButton.setOnClickListener {
-            habitDialog.show()
-        }
-
         // настройка CalendarRecyclerView
         val titlesContainer = view.findViewById<ViewGroup>(R.id.titlesContainer)
         val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY)
         titlesContainer.children
             .map { it as TextView }
             .forEachIndexed { index, textView ->
+                val dict = mapOf(
+                    "Mon" to "ПН",
+                    "Tue" to "ВТ",
+                    "Wed" to "СР",
+                    "Thu" to "ЧТ",
+                    "Fri" to "ПТ",
+                    "Sat" to "СБ",
+                    "Sun" to "ВС"
+                )
                 val dayOfWeek = daysOfWeek[index]
-                val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                val title = dict.getValue(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()))
                 textView.text = title
             }
+
+        // настройка HabitRecyclerView
+        val habitsRecycler: RecyclerView = view.findViewById(R.id.habitRecycler)
+        habitsAdapter = HabitAdapter({ habit ->
+            val fragment = HabitDetailFragment.newInstance(habit)
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.container, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }, habitsList, selectedDate)
+        habitsRecycler.layoutManager = LinearLayoutManager(context)
+        habitsRecycler.adapter = habitsAdapter
 
         calendarView = view.findViewById(R.id.weekCalendarView)
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.findViewById<TextView>(R.id.calendarDayText)
             lateinit var day: WeekDay
-
             init {
                 view.setOnClickListener {
-                    // Обновляем данные фрагмента при нажатии на день
-                    Log.d(TAG, "Day clicked: ${day.date}") // Логируем нажатие
+
+                    Log.d(TAG, "Day clicked: ${day.date}")
                     if (day.position == WeekDayPosition.RangeDate) {
-                        // Keep a reference to any previous selection
-                        // in case we overwrite it and need to reload it.
                         val currentSelection = selectedDate
                         if (currentSelection == day.date) {
-                            // If the user clicks the same date, clear selection.
                             selectedDate = null
-                            // Reload this date so the dayBinder is called
-                            // and we can REMOVE the selection background.
                             calendarView.notifyDateChanged(currentSelection)
                         } else {
                             selectedDate = day.date
-                            // Reload the newly selected date so the dayBinder is
-                            // called and we can ADD the selection background.
                             calendarView.notifyDateChanged(day.date)
                             if (currentSelection != null) {
-                                // We need to also reload the previously selected
-                                // date so we can REMOVE the selection background.
                                 calendarView.notifyDateChanged(currentSelection)
                             }
                         }
                     }
-                    val fragment =
-                        parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
+                    val fragment = parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
                     if (fragment != null) {
+                        Log.d(TAG, "Updating habit for date: ${day.date}")
                         fragment.updateFragmentData(day.date)
                         selectedDate = day.date
                     } else {
                         Log.d(TAG, "HomeFragment is null")
                     }
-                    Log.d(TAG, "updateFragmentData called") // Логируем вызов метода
                 }
             }
         }
 
 
         calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
-            // Called only when a new container is needed.
             override fun create(view: View) = DayViewContainer(view)
-
-            // Called every time we need to reuse a container.
             override fun bind(container: DayViewContainer, data: WeekDay) {
                 container.day = WeekDay(data.date, WeekDayPosition.RangeDate)
                 container.textView.text = data.date.dayOfMonth.toString()
@@ -147,7 +152,6 @@ class HomeFragment : Fragment() {
                 val textView = container.textView
                 textView.text = day.date.dayOfMonth.toString()
                 if (day.position == WeekDayPosition.RangeDate) {
-                    // Show the month dates. Remember that views are reused!
                     textView.visibility = View.VISIBLE
                     if (day.date == selectedDate) {
                         textView.setTextColor(Color.MAGENTA)
@@ -170,21 +174,6 @@ class HomeFragment : Fragment() {
         calendarView.setup(startDate, endDate, firstDayOfWeek)
         calendarView.scrollToWeek(currentDate)
 
-        // настройка HabitRecyclerView
-
-        val habitsRecycler: RecyclerView = view.findViewById(R.id.habitRecycler)
-        habitsAdapter = HabitAdapter({ habit ->
-            // Handle the click event
-            val fragment = HabitDetailFragment.newInstance(habit)
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.container, fragment) // Use your container ID
-            transaction.addToBackStack(null) // Optional: add to back stack
-            transaction.commit()
-        }, habitsList)
-        habitsRecycler.layoutManager = LinearLayoutManager(context)
-        habitsRecycler.adapter = habitsAdapter
-
-
         fetchHabits()
         fetchAffirmations()
         val fragment = parentFragmentManager.findFragmentById(R.id.container) as? HomeFragment
@@ -201,17 +190,35 @@ class HomeFragment : Fragment() {
 
             Log.d(TAG, "$existingFragment")
             if (existingFragment != null) {
-                // Если фрагмент существует, обновите его данные
                 existingFragment.updateDiaryData(selectedDate)
             } else {
-                // Если фрагмент не существует, создайте новый
                 val fragment = DiaryFragment.newInstance(selectedDate)
                 val transaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.container, fragment) // Используйте ваш ID контейнера
-                transaction.addToBackStack(null) // Добавляем в стек возврата
+                transaction.replace(R.id.container, fragment)
+                transaction.addToBackStack(null)
                 transaction.commit()
             }
         }
+        val plusButton = view.findViewById<View>(R.id.plusButton)
+        val habitDialog = HabitDialog(requireContext())
+        plusButton.setOnClickListener {
+            habitDialog.show()
+        }
+        updateHabitList(habitsList)
+        val arrowIcon2 = view.findViewById<ImageView>(R.id.arrowIcon2)
+        arrowIcon2.setOnClickListener {
+            val articleFragment = ArticlesFragment()
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.container, articleFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+            updateMenuSelection(R.id.articles) // Замените на ID вашего фрагмента
+        }
+    }
+    private fun updateMenuSelection(fragmentId: Int) {
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNavigationView.selectedItemId = fragmentId
     }
 
     override fun onDestroyView() {
@@ -233,7 +240,7 @@ class HomeFragment : Fragment() {
                     for (document in snapshot.documents) {
                         val affirmation = document.toObject(Affirmation::class.java)
                         affirmation?.let {
-                            it.id = document.id // Получаем ID документа
+                            it.id = document.id
                             affirmationsList.add(it) // Добавляем в список аффирмаций
                         }
                     }
@@ -254,21 +261,20 @@ class HomeFragment : Fragment() {
 
                 if (snapshot != null && !snapshot.isEmpty) {
                     originalHabitsList.clear() // Очищаем оригинальный список
-                    habitsList.clear() // Очищаем текущий список для обновления
                     for (document in snapshot.documents) {
                         val habit = document.toObject(Habit::class.java)
                         habit?.let {
-                            it.id = document.id // Получаем ID документ
+                            it.id = document.id
                             originalHabitsList.add(it) // Добавляем в оригинальный список
-                            habitsList.add(it) // Добавляем в текущий список
                         }
                     }
-                    habitsAdapter.notifyDataSetChanged() // Обновляем адаптер
+                    updateHabitList(getHabitsForDay(selectedDate)) // Обновляем список привычек для текущей даты
                 } else {
                     Log.d(TAG, "Current data: null")
                 }
             }
     }
+
 
 
     fun updateFragmentData(selectedDate: LocalDate) {
@@ -277,7 +283,6 @@ class HomeFragment : Fragment() {
         val affirmation = getRandomAffirmation()
         val habitsForDay = getHabitsForDay(selectedDate)
 
-        // Обновляем UI
         updateDayNumber(dayNumber)
         updateAffirmation(affirmation)
         updateHabitList(habitsForDay)
@@ -291,14 +296,17 @@ class HomeFragment : Fragment() {
         if (result > 9) {
             result = result.toString().map { it.toString().toInt() }.sum()
         }
+        if (result > 9) {
+            result = result.toString().map { it.toString().toInt() }.sum()
+        }
         return result
     }
 
     private fun getRandomAffirmation(): String {
         return if (affirmationsList.isNotEmpty()) {
-            affirmationsList.random().text // Возвращаем случайную аффирмацию
+            affirmationsList.random().text
         } else {
-            "Нет доступных аффирмаций" // Возвращаем сообщение по умолчанию, если список пуст
+            "Я лчуший"
         }
     }
 
@@ -331,7 +339,7 @@ class HomeFragment : Fragment() {
     private fun updateHabitList(habits: List<Habit>) {
         habitsList.clear()
         habitsList.addAll(habits)
-        habitsAdapter.notifyDataSetChanged()
+        habitsAdapter.updateSelectedDate(selectedDate)
     }
 
 
